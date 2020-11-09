@@ -57,17 +57,37 @@ print('\n==================================================================\n')
 myAvg = cloneDF(mergeRatings)
 #myAvg = myAvg.groupby(['movie_id', 'title'])['rating'].agg(
 #    {'SUM': np.sum, 'COUNT': np.size, 'AVG': np.mean, 'myAVG': lambda x: x.sum() / float(x.count())})
-myAvg = myAvg.groupby(['movie_id', 'title'])['rating'].agg(
-    {np.sum, np.size, np.mean, lambda x: x.sum() / float(x.count())},
-    col_names = ('SUM', 'COUNT', 'AVG', 'myAVG')
-)
+pandas_version = pd.__version__.split('.')
+if pandas_version[0] == '0' and int(pandas_version[1]) < 25:  # Pandas version before 0.25
+    myAvg = myAvg.groupby(['movie_id', 'title'])['rating'].agg(
+        {np.sum, np.size, np.mean, lambda x: x.sum() / float(x.count())},
+        col_names = ('SUM', 'COUNT', 'AVG', 'myAVG')
+    )
+else:
+    myAvg.groupby(['movie_id', 'title']).agg(
+    somme=('rating', np.sum),
+    count=('rating', np.size),
+    avg=('rating', np.mean),
+    myAVG=('rating', lambda x: x.sum() / float(x.count()))
+    )
+
 print('My info ratings: \n%s' % myAvg[:10])
 print('\n==================================================================\n')
 
 
 # Sort data ratings by created field (groupby + lambda function + sorted)
-# My solution is the only one right !!!
-nico_awesome_variable = cloneDF(mergeRatings)
-nico_awesome_variable = nico_awesome_variable.groupby(['movie_id', 'title'])['rating'].agg(
-    {'COUNT': np.size, 'myAVG': lambda x: x.sum() / float(x.count())}).sort('COUNT', ascending=False)
+if pandas_version[0] == '0' and int(pandas_version[1]) < 25:  # Pandas version before 0.25
+    # My solution is the only one right !!! (if Pandas is old enough)
+    nico_awesome_variable = cloneDF(mergeRatings)
+    nico_awesome_variable = nico_awesome_variable.groupby(['movie_id', 'title'])['rating'].agg(
+        {'COUNT': np.size, 'myAVG': lambda x: x.sum() / float(x.count())}).sort('COUNT', ascending=False)
+else:
+    nico_awesome_variable = cloneDF(mergeRatings)
+    nico_awesome_variable = nico_awesome_variable.groupby(['movie_id', 'title']).agg(
+            somme=('rating', np.sum),
+            count=('rating', np.size),
+            avg=('rating', np.mean),
+            myAVG=('rating', lambda x: x.sum() / float(x.count()))
+            ).sort_values('count', ascending=False)
+
 print('My info sorted: \n%s' % nico_awesome_variable[:15])
