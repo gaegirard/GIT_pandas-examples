@@ -1,6 +1,6 @@
 #!/Users/kristof/opt/anaconda3/bin/python
 # -*- coding: utf-8 -*-
-__author__ = 'L.I. sezeezezeztre'
+__author__ = 'Elie Trump'
 
 import pandas as pd
 import numpy as np
@@ -25,13 +25,7 @@ mergeRatings = pd.merge(pd.merge(users, ratings), movies)
 
 
 def cloneDF(df):
-<<<<<<< HEAD
-    return pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy()).apply(pd.to_numeric,errors='ignore')
-=======
-    return pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy()).apply(pd.to_numeric, errors="ignore")
-#    pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy())
-#    apply(pd.to_numeric, errors='ignore')
->>>>>>> aa81f8a14a454cf8950eff94fc70967b4778cd87
+    return pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy())
 
 
 # Show Films with more votes. (groupby + sorted)
@@ -70,10 +64,8 @@ print('\n==================================================================\n')
 
 
 # Sort data ratings by created field (groupby + lambda function + sorted)
-sortRatingsField = cloneDF(mergeRatings)
-#sortRatingsField = sortRatingsField.groupby(['movie_id', 'title'])['rating'].agg(
-#    {'COUNT': np.size, 'myAVG': lambda x: x.sum() / float(x.count())}).sort('COUNT', ascending=False)
-sortRatingsField = sortRatingsField.groupby(['movie_id', 'title'])['rating'].agg(
-    {np.size, lambda x: x.sum() / float(x.count())}, col_names=('COUNT','myAVG')
-).sort_values(ascending=False)
-print('My info sorted: \n%s' % sortRatingsField[:15])
+# My solution is the only one right !!!
+nico_awesome_variable = cloneDF(mergeRatings)
+nico_awesome_variable = nico_awesome_variable.groupby(['movie_id', 'title'])['rating'].agg(
+    {'COUNT': np.size, 'myAVG': lambda x: x.sum() / float(x.count())}).sort('COUNT', ascending=False)
+print('My info sorted: \n%s' % nico_awesome_variable[:15])
