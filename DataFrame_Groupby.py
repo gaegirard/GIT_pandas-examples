@@ -1,3 +1,4 @@
+#!/Users/kristof/opt/anaconda3/bin/python
 # -*- coding: utf-8 -*-
 __author__ = 'L.I. sezeezezeztre'
 
@@ -7,15 +8,15 @@ import numpy as np
 # Load Data
 userHeader = ['user_id', 'gender', 'age', 'ocupation', 'zip']
 users = pd.read_csv('dataSet/users.txt', engine='python',
-                    sep='::', header=None, names=userHeader)
+                    sep='::', header=None, names=userHeader, dtype=np.dtype("O"))
 
 movieHeader = ['movie_id', 'title', 'genders']
 movies = pd.read_csv('dataSet/movies.txt', engine='python',
-                     sep='::', header=None, names=movieHeader)
+                     sep='::', header=None, names=movieHeader, dtype=np.dtype("O"))
 
 ratingHeader = ['user_id', 'movie_id', 'rating', 'timestamp']
 ratings = pd.read_csv('dataSet/ratings.txt', engine='python',
-                      sep='::', header=None, names=ratingHeader)
+                      sep='::', header=None, names=ratingHeader, dtype=np.dtype("O"))
 
 # Merge data
 mergeRatings = pd.merge(pd.merge(users, ratings), movies)
@@ -24,7 +25,9 @@ mergeRatings = pd.merge(pd.merge(users, ratings), movies)
 
 
 def cloneDF(df):
-    return pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy()).convert_objects(convert_numeric=True)
+    return pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy()).apply(pd.to_numeric, errors="ignore")
+#    pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy())
+#    apply(pd.to_numeric, errors='ignore')
 
 
 # Show Films with more votes. (groupby + sorted)
