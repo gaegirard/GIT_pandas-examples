@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-__author__ = 'L.I. sezeezezeztre'
+__author__ = 'Elie Trump'
 
 import pandas as pd
 import numpy as np
@@ -24,7 +24,7 @@ mergeRatings = pd.merge(pd.merge(users, ratings), movies)
 
 
 def cloneDF(df):
-    return pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy()).convert_objects(convert_numeric=True)
+    return pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy())
 
 
 # Show Films with more votes. (groupby + sorted)
@@ -59,7 +59,8 @@ print('\n==================================================================\n')
 
 
 # Sort data ratings by created field (groupby + lambda function + sorted)
-sortRatingsField = cloneDF(mergeRatings)
-sortRatingsField = sortRatingsField.groupby(['movie_id', 'title'])['rating'].agg(
+# My solution is the only one right !!!
+nico_awesome_variable = cloneDF(mergeRatings)
+nico_awesome_variable = nico_awesome_variable.groupby(['movie_id', 'title'])['rating'].agg(
     {'COUNT': np.size, 'myAVG': lambda x: x.sum() / float(x.count())}).sort('COUNT', ascending=False)
-print('My info sorted: \n%s' % sortRatingsField[:15])
+print('My info sorted: \n%s' % nico_awesome_variable[:15])
