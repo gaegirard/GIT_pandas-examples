@@ -1,6 +1,6 @@
 #!/Users/kristof/opt/anaconda3/bin/python
 # -*- coding: utf-8 -*-
-__author__ = 'Elie Trump'
+__author__ = 'L.I. sezeezezeztre'
 
 import pandas as pd
 import numpy as np
@@ -25,7 +25,9 @@ mergeRatings = pd.merge(pd.merge(users, ratings), movies)
 
 
 def cloneDF(df):
-    return pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy())
+    # return pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy()).convert_objects(convert_numeric=True)
+    return pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy()).apply(pd.to_numeric, errors="ignore")
+    # pd.DataFrame(df.values.copy(), df.index.copy(), df.columns.copy())
 
 
 # Show Films with more votes. (groupby + sorted)
@@ -53,8 +55,12 @@ print('\n==================================================================\n')
 
 # Show data ratings movies, applying a function (groupby + lambda function)
 myAvg = cloneDF(mergeRatings)
+#myAvg = myAvg.groupby(['movie_id', 'title'])['rating'].agg(
+#    {'SUM': np.sum, 'COUNT': np.size, 'AVG': np.mean, 'myAVG': lambda x: x.sum() / float(x.count())})
 myAvg = myAvg.groupby(['movie_id', 'title'])['rating'].agg(
-    {'SUM': np.sum, 'COUNT': np.size, 'AVG': np.mean, 'myAVG': lambda x: x.sum() / float(x.count())})
+    {np.sum, np.size, np.mean, lambda x: x.sum() / float(x.count())},
+    col_names = ('SUM', 'COUNT', 'AVG', 'myAVG')
+)
 print('My info ratings: \n%s' % myAvg[:10])
 print('\n==================================================================\n')
 
