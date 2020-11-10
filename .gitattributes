@@ -1,0 +1,2 @@
+dataSet/*.txt filter=lfs diff=lfs merge=lfs -text
+./dataSet/*.txt filter=lfs diff=lfs merge=lfs -text
